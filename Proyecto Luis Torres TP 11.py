@@ -2,6 +2,10 @@
 
 import pandas as pd
 from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
 
 # ----------- Fin de las Importaciones
 
@@ -38,4 +42,6 @@ print("Prueba", features_test.shape, target_test.shape)
 print("Entrenamiento", target_train.mean())
 print("Validación", target_valid.mean())
 print("Prueba", target_test.mean())
+
+# 2. Investiga la calidad de diferentes modelos cambiando los hiperparámetros. Describe brevemente los hallazgos del estudio.
 
