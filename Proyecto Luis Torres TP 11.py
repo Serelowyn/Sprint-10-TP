@@ -45,3 +45,48 @@ print("Prueba", target_test.mean())
 
 # 2. Investiga la calidad de diferentes modelos cambiando los hiperparámetros. Describe brevemente los hallazgos del estudio.
 
+"""arbol de decision"""
+
+best_tree_score = 0
+best_tree_depth = 0
+for depth in range(1, 11):
+    model = DecisionTreeClassifier(random_state=12345, max_depth=depth)
+    model.fit(features_train, target_train)
+    score = model.score(features_valid, target_valid)
+    print(f"max_depth = {depth}: exactitud en validacion = {score:.4f}")
+    if score > best_tree_score:
+        best_tree_score = score
+        best_tree_depth = depth
+
+print(f"Mejor arbol de decision es max_depth={best_tree_depth},"
+      f"exactitud en validacion={best_tree_score:.4f}")
+ 
+"""bosque aleatorio"""
+
+best_forest_score = 0
+best_forest_est = 0
+best_forest_depth = 0
+for est in range(10, 101, 10):
+    for depth in range(1, 11):
+        model = RandomForestClassifier(
+            random_state=12345, n_estimators=est, max_depth=depth)
+        model.fit(features_train, target_train)
+        score = model.score(features_valid, target_valid)
+        if score > best_forest_score:
+            best_forest_score = score
+            best_forest_est = est
+            best_forest_depth = depth
+ 
+print(f"Mejor bosque aleatorio -> n_estimators={best_forest_est},"
+      f"max_depth={best_forest_depth},"
+      f"exactitud en validacion={best_forest_score:.4f}")
+ 
+"""regresion logistica"""
+
+log_model = LogisticRegression(random_state=12345, solver="liblinear")
+log_model.fit(features_train, target_train)
+log_score_train = log_model.score(features_train, target_train)
+log_score_valid = log_model.score(features_valid, target_valid)
+print(f"Exactitud en entrenamiento: {log_score_train:.4f}")
+print(f"Exactitud en validación: {log_score_valid:.4f}")
+ 
