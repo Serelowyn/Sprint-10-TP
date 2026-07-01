@@ -31,20 +31,19 @@ target = df["is_ultra"]
 
 features_train, features_rest, target_train, target_rest = train_test_split(features, target, test_size=0.4, random_state=12345)
 
-features_valid, features_test, target_valid, target_test = train_test_split(
-    features_rest, target_rest, test_size=0.5, random_state=12345)
+features_valid, features_test, target_valid, target_test = train_test_split(features_rest, target_rest, test_size=0.5, random_state=12345)
 
 """Verificacion de que las proporciones de clase se mantuvieron"""
 
 print("Entrenamiento:", features_train.shape, target_train.shape)
-print("Validación", features_valid.shape, target_valid.shape)
+print("Validacion", features_valid.shape, target_valid.shape)
 print("Prueba", features_test.shape, target_test.shape)
 
 print("Entrenamiento", target_train.mean())
-print("Validación", target_valid.mean())
+print("Validacion", target_valid.mean())
 print("Prueba", target_test.mean())
 
-# 2. Investiga la calidad de diferentes modelos cambiando los hiperparámetros. Describe brevemente los hallazgos del estudio.
+# 3. Investiga la calidad de diferentes modelos cambiando los hiperparámetros. Describe brevemente los hallazgos del estudio.
 
 """arbol de decision"""
 
@@ -59,8 +58,7 @@ for depth in range(1, 11):
         best_tree_score = score
         best_tree_depth = depth
 
-print(f"Mejor arbol de decision es max_depth={best_tree_depth},"
-      f"exactitud en validacion={best_tree_score:.4f}")
+print(f"mejor arbol de decision es max_depth={best_tree_depth},"f"exactitud en validacion={best_tree_score:.4f}")
  
 """bosque aleatorio"""
 
@@ -78,9 +76,7 @@ for est in range(10, 101, 10):
             best_forest_est = est
             best_forest_depth = depth
  
-print(f"Mejor bosque aleatorio -> n_estimators={best_forest_est},"
-      f"max_depth={best_forest_depth},"
-      f"exactitud en validacion={best_forest_score:.4f}")
+print(f"mejor bosque aleatorio -> n_estimators={best_forest_est},"f"max_depth={best_forest_depth},"f"exactitud en validacion={best_forest_score:.4f}")
  
 """regresion logistica"""
 
@@ -89,7 +85,6 @@ log_model.fit(features_train, target_train)
 log_score_train = log_model.score(features_train, target_train)
 log_score_valid = log_model.score(features_valid, target_valid)
 print(f"Exactitud en entrenamiento: {log_score_train:.4f}")
-print(f"Exactitud en validación: {log_score_valid:.4f}")
  
 # 4. Comprueba la calidad del modelo usando el conjunto de prueba.
 
@@ -101,8 +96,7 @@ test_predictions = final_model.predict(features_test)
 test_accuracy = accuracy_score(target_test, test_predictions)
  
 """evaluacion del modelo"""
-print(f'modelo final: RandomForestClassifier(n_estimators={best_forest_est},'
-      f'max_depth={best_forest_depth})')
+print(f'modelo final: RandomForestClassifier(n_estimators={best_forest_est},'f'max_depth={best_forest_depth})')
 print(f'exactitud:{test_accuracy:.4f}')
 
 if test_accuracy >= 0.75:
@@ -112,3 +106,17 @@ else:
     
 # 5. Prueba de cordura
 
+dummy_frequent = DummyClassifier(strategy="most_frequent", random_state=12345)
+dummy_frequent.fit(features_train, target_train)
+dummy_frequent_acc = dummy_frequent.score(features_test, target_test)
+print(f'dummy - exactitud en prueba:'f'{dummy_frequent_acc:.4f}')
+ 
+dummy_stratified = DummyClassifier(strategy="stratified", random_state=12345)
+dummy_stratified.fit(features_train, target_train)
+dummy_stratified_acc = dummy_stratified.score(features_test, target_test)
+print(f'dummy - exactitud en prueba: 'f'{dummy_stratified_acc:.4f}')
+ 
+if test_accuracy > dummy_frequent_acc and test_accuracy > dummy_stratified_acc:
+    print("modelo supera la prueba de cordura")
+else:
+    print("mal el modelo, revisar nuevamente.")
