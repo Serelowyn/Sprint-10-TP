@@ -90,3 +90,22 @@ log_score_valid = log_model.score(features_valid, target_valid)
 print(f"Exactitud en entrenamiento: {log_score_train:.4f}")
 print(f"Exactitud en validación: {log_score_valid:.4f}")
  
+# 4. Comprueba la calidad del modelo usando el conjunto de prueba.
+
+final_model = RandomForestClassifier(
+    random_state=12345, n_estimators=best_forest_est, max_depth=best_forest_depth)
+final_model.fit(features_train, target_train)
+ 
+test_predictions = final_model.predict(features_test)
+test_accuracy = accuracy_score(target_test, test_predictions)
+ 
+"""evaluacion del modelo"""
+print(f'modelo final: RandomForestClassifier(n_estimators={best_forest_est},'
+      f'max_depth={best_forest_depth})')
+print(f'exactitud:{test_accuracy:.4f}')
+
+if test_accuracy >= 0.75:
+    print("el modelo tiene un umbral igual o mayor de exactitud a 0.75")
+else:
+    print("El modelo tiene un umbral menor de exactitud")
+    
