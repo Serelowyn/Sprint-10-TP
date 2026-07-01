@@ -6,6 +6,7 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
+from sklearn.dummy import DummyClassifier
 
 # ----------- Fin de las Importaciones
 
@@ -109,3 +110,5 @@ if test_accuracy >= 0.75:
 else:
     print("El modelo tiene un umbral menor de exactitud")
     
+# 5. Prueba de cordura
+
